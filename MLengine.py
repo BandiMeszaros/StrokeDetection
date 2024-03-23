@@ -40,7 +40,8 @@ class MLEngine(object):
                     y_pred[name] = int(model.predict(input_array))
             else:
                 raise Exception("Target column not found in dataframe.")
-            return json.dumps(y_pred), 200
+            return_json = {"prediction": y_pred, "target_column": target_column[0]}
+            return json.dumps(return_json), 200
 
         except Exception as e:
             return json.dumps({'message': 'Internal Server Error. ', 'error': str(e)}), 500
@@ -73,10 +74,8 @@ class MLEngine(object):
             sample_df = pd.concat([sample_df, new_df], axis=1).drop(columns=[col])
 
         for col, scaler in self.scalers.items():
-            new_data = scaler.transform(sample_df[col].to_numpy().reshape(-1, 1))
-            new_df = pd.DataFrame(new_data, columns=scaler.get_feature_names_out([col]))
-            sample_df = pd.concat([sample_df, new_df], axis=1).drop(columns=[col])
-
+            if col in sample_df.columns:
+                sample_df[col] = scaler.transform(sample_df[[col]])[0][0]
         return sample_df
 
     @staticmethod
@@ -94,7 +93,8 @@ class MLEngine(object):
         """
 
         if "stroke" in df.columns:
-            return df["stroke"], df.drop(columns="stroke", inplace=True, axis=1)
+            input_array = df.drop(columns=["stroke"])
+            return df["stroke"], input_array
         else:
             return None, df
 
