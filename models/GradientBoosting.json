@@ -1,0 +1,1 @@
+[{"learning_rate": 0.34819592976965336, "max_depth": 19, "min_samples_leaf": 3, "n_estimators": 157}, {"accuracy_validation": 0.9820433436532507}, {"accuracy_train": 1.0}]

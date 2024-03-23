@@ -1,0 +1,1 @@
+[{"algorithm": "kd_tree", "n_neighbors": 52, "weights": "distance"}, {"accuracy_validation": 0.9808049535603716}, {"accuracy_train": 1.0}]
