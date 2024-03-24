@@ -1,8 +1,7 @@
 import json
-import os
 import pandas as pd
 import pickle
-
+import sys
 import utils
 
 
@@ -49,18 +48,19 @@ class MLEngine(object):
     def preprocess_train(self, df):
         pass
 
-    def preprocess_inference(self, data):
+    def preprocess_inference(self, data: pd.DataFrame):
         """
         Preprocesses the input data for inference, handling missing values
         and transforming the data using encoders and scalers.
 
         Parameters:
-            data: input data to be preprocessed
+            data(pd.DataFrame): input data to be preprocessed
 
         Returns:
             sample_df: preprocessed data ready for inference
         """
-        sample_df = pd.DataFrame([data])
+        sample_df = data
+        #sample_df = pd.DataFrame([data])
         if sample_df.isnull().values.any():
             cols_name = sample_df.columns[sample_df.isnull().any()].tolist()
             for col in cols_name:
@@ -119,4 +119,4 @@ class MLEngine(object):
         return data
 
 
-
+engine = MLEngine()
