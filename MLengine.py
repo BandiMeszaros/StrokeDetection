@@ -46,10 +46,10 @@ class MLEngine(object):
             else:
                 raise Exception("Target column not found in dataframe.")
             return_json = {"prediction": y_pred, "target_column": target_column[0]}
-            return json.dumps(return_json), 200
+            return return_json, 200
 
         except Exception as e:
-            return json.dumps({'message': 'Internal Server Error. ', 'error': str(e)}), 500
+            return {'message': 'Internal Server Error. ', 'error': str(e)}, 500
 
     def preprocess_train(self, df):
 
@@ -246,8 +246,8 @@ class MLEngine(object):
                                                              y_test)
                 model_fits[name] = best_fit
         except Exception as e:
-            return json.dumps({'message': 'Internal Server Error. ', 'error': str(e)}), 500
-        return json.dumps(model_fits), 200
+            return {'message': 'Internal Server Error. ', 'error': str(e)}, 500
+        return model_fits, 200
 
 
 engine = MLEngine()

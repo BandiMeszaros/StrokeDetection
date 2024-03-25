@@ -28,7 +28,7 @@ async def handle_predict_request(file: UploadFile) -> dict:
 
 
 @app.post(f"/{API_VERSION}/train", description="Trains the model with the provided data.")
-async def handle_train_request(train_file: UploadFile):
+async def handle_train_request(train_file: UploadFile) -> dict:
     
     if _check_file_extension(train_file):
         data = pd.read_csv(train_file.file)
