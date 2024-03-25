@@ -11,15 +11,9 @@ app = FastAPI(title="Stroke Prediction API",
 def _check_file_extension(file):
     return file.filename.lower().endswith(".csv")
 
-# create base url for the api that is redirected to the /docs endpoint
-@app.get("/")
-async def root():
-    return {"message": "Welcome to Stroke Prediction API"}
 
-
-
-@app.post("/v1/predict", description="Returns the prediction of stroke if data is provided.")
-async def handle_post_request(file: UploadFile) -> str:
+@app.post(f"/{API_VERSION}/predict", description="Returns the prediction of stroke if data is provided.")
+async def handle_predict_request(file: UploadFile) -> dict:
 
     if _check_file_extension(file):
         data_row = pd.read_csv(file.file)
@@ -32,10 +26,19 @@ async def handle_post_request(file: UploadFile) -> str:
     else:
         raise HTTPException(status_code=400, detail="File format not supported. Please provide a csv file.")
 
-@app.post("/path/train")
-async def handle_train_request():
-    # ... your logic here ...
-    return {"message": "Train request received!"}
+
+@app.post(f"/{API_VERSION}/train", description="Trains the model with the provided data.")
+async def handle_train_request(train_file: UploadFile):
+    
+    if _check_file_extension(train_file):
+        data = pd.read_csv(train_file.file)
+        train, status_code = engine.train(data)
+        if status_code == 200:
+            return train
+        else:
+            raise HTTPException(status_code=500, detail=train)
+    else:
+        raise HTTPException(status_code=400, detail="File format not supported. Please provide a csv file.")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5000)

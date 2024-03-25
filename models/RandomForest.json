@@ -1,1 +1,1 @@
-[{"max_depth": 9, "n_estimators": 5}, {"accuracy_validation": 0.9560371517027864}, {"accuracy_train": 0.9614371999380518}]
+[{"max_depth": 7, "n_estimators": 196}, {"accuracy_validation": 0.9393346379647749}, {"accuracy_train": 0.9547455968688845}]

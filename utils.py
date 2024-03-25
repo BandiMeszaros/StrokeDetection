@@ -1,4 +1,8 @@
 # Constants for the project
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from scipy.stats import randint, uniform
 
 DATA_DIR = 'data/'
 RAW_DATA_DIR = 'data/raw_data/'
@@ -9,6 +13,23 @@ DISCRETE_COLS = ['hypertension', 'heart_disease', 'stroke']
 NOMINAL_COLS = ['gender', 'work_type', 'Residence_type',
                 'smoking_status', 'ever_married', 'diabetic_status', 'weight_status']
 
+USED_MODELS = {
+    "GradientBoosting": (GradientBoostingClassifier, {
+        'n_estimators': randint(50, 250),
+        'learning_rate': uniform(0.001, 0.7),
+        'max_depth': randint(1, 20),
+        'min_samples_leaf': randint(1, 20)}),
+    "KNN": (KNeighborsClassifier, {
+        'n_neighbors': randint(1, 100),
+        'weights': ['uniform', 'distance'],
+        'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']}),
+    "RandomForest": (RandomForestClassifier, {
+        'n_estimators': randint(2, 200),
+        'max_depth': randint(1, 10)}),
+    "SVM": (SVC, {
+        'C': uniform(0.01, 10),
+        'kernel': ['rbf', 'linear']})
+}
 
 # utility functions
 

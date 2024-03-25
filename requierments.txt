@@ -3,3 +3,4 @@ pandas
 sweetviz
 uvicorn
 fastapi
+python-multipart
