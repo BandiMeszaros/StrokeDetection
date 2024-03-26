@@ -1,1 +1,1 @@
-[{"C": 6.126676411891345, "kernel": "rbf"}, {"accuracy_validation": 0.95789995047053}, {"accuracy_train": 0.9581268582755204}]
+[{"C": 6.353276403126456, "kernel": "rbf"}, {"accuracy_validation": 0.95789995047053}, {"accuracy_train": 0.9581268582755204}]

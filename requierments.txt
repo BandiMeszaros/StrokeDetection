@@ -4,3 +4,4 @@ sweetviz
 uvicorn
 fastapi
 python-multipart
+pydantic

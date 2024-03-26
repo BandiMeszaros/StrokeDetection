@@ -1,1 +1,1 @@
-[{"algorithm": "auto", "n_neighbors": 73, "weights": "distance"}, {"accuracy_validation": 0.9861317483902923}, {"accuracy_train": 1.0}]
+[{"algorithm": "auto", "n_neighbors": 66, "weights": "distance"}, {"accuracy_validation": 0.9861317483902923}, {"accuracy_train": 1.0}]

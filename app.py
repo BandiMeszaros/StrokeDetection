@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, UploadFile
 import uvicorn
 import pandas as pd
 from MLengine import engine
+from response_schema import PredictSchema, TrainSchema
 API_VERSION = "v1"
 app = FastAPI(title="Stroke Prediction API",
               version=API_VERSION,
@@ -13,7 +14,16 @@ def _check_file_extension(file):
 
 
 @app.post(f"/{API_VERSION}/predict", description="Returns the prediction of stroke if data is provided.")
-async def handle_predict_request(file: UploadFile) -> dict:
+async def handle_predict_request(file: UploadFile) -> PredictSchema:
+    """
+    Returns the prediction of stroke if data is provided.
+
+    Parameters:
+    - file: UploadFile
+
+    Returns:
+    - PredictSchema
+    """
 
     if _check_file_extension(file):
         data_row = pd.read_csv(file.file)
@@ -28,7 +38,14 @@ async def handle_predict_request(file: UploadFile) -> dict:
 
 
 @app.post(f"/{API_VERSION}/train", description="Trains the model with the provided data.")
-async def handle_train_request(train_file: UploadFile) -> dict:
+async def handle_train_request(train_file: UploadFile) -> TrainSchema:
+    """
+    Trains the model with the provided data.
+    Parameters:
+    train_file (UploadFile): The file containing the data for training.
+    Returns:
+    TrainSchema: The trained model or an HTTPException if an error occurs.
+    """
     
     if _check_file_extension(train_file):
         data = pd.read_csv(train_file.file)
