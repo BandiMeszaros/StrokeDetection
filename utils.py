@@ -4,10 +4,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from scipy.stats import randint, uniform
 
-DATA_DIR = 'data/'
-RAW_DATA_DIR = 'data/raw_data/'
-PROCESSED_DATA_DIR = 'data/processed_data/'
-
 CONTINUOUS_COLS = ['age', 'avg_glucose_level', 'bmi']
 DISCRETE_COLS = ['hypertension', 'heart_disease', 'stroke']
 NOMINAL_COLS = ['gender', 'work_type', 'Residence_type',

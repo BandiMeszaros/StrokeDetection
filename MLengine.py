@@ -16,16 +16,10 @@ class MLEngine(object):
         self.encoders = self.load("artifacts/encoders.pkl")
         self.imputer = self.load("artifacts/imputer.pkl")
         self.scalers = self.load("artifacts/scalers.pkl")
-        self.model_GB = self.load("models/best_model_GradientBoosting.pkl")
-        self.model_KNN = self.load("models/best_model_KNN.pkl")
-        self.model_RF = self.load("models/best_model_RandomForest.pkl")
-        self.model_SVM = self.load("models/best_model_SVM.pkl")
+        self.models = {}
 
-        self.models = {"GradientBoosting": self.model_GB,
-                       "KNN": self.model_KNN,
-                       "RandomForest": self.model_RF,
-                       "SVM": self.model_SVM}
-
+        for k in utils.USED_MODELS.keys():
+            self.models[k] = self.load(f"models/best_model_{k}.pkl")
     def predict(self, data_row: pd.DataFrame):
         """
         Predicts the target variable for a given data row.
@@ -201,8 +195,7 @@ class MLEngine(object):
 
         return data
 
-    @staticmethod
-    def _optimizing_model_parameters(model_name, model, param_distributions,
+    def _optimizing_model_parameters(self, model_name, model, param_distributions,
                                     X_train, y_train, X_validation,
                                     y_validation) -> list:
         rand_search = RandomizedSearchCV(model,
@@ -210,9 +203,12 @@ class MLEngine(object):
                                          n_jobs=-1, n_iter=50)
         rand_search.fit(X_train, y_train.values.ravel())
         best_model = rand_search.best_estimator_
+        self.models[model_name] = best_model
         y_pred = best_model.predict(X_validation)
         accuracy = accuracy_score(y_validation, y_pred)
         train_accuracy = accuracy_score(y_train, best_model.predict(X_train))
+
+        self._save(best_model, f"models/best_model_{model_name}.pkl")
 
         # Enhanced output
         print(f"\nOptimized Parameters for {model_name}:")
@@ -226,8 +222,7 @@ class MLEngine(object):
                        {"accuracy_train": train_accuracy}],
                       f)
 
-        return [rand_search.best_params_, {"accuracy_validation": accuracy},
-                       {"accuracy_train": train_accuracy}]
+        return [rand_search.best_params_, {"accuracy_validation": accuracy}, {"accuracy_train": train_accuracy}]
 
     def train(self, data: pd.DataFrame):
         """
@@ -237,6 +232,7 @@ class MLEngine(object):
             data(pd.DataFrame): input data to be trained on
         """
         model_fits = {}
+        self.models = {}
         try:
             X_train, X_test, y_train, y_test = self.preprocess_train(data)
             for name, (model, grid) in utils.USED_MODELS.items():
@@ -245,6 +241,7 @@ class MLEngine(object):
                                                              y_train, X_test,
                                                              y_test)
                 model_fits[name] = best_fit
+
         except Exception as e:
             return {'message': 'Internal Server Error. ', 'error': str(e)}, 500
         return model_fits, 200
