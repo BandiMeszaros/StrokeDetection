@@ -17,7 +17,7 @@ This is a learning project where I learnt the basics of machine learning develop
 ### Install 
     1. git clone git@github.com:BandiMeszaros/StrokeDetection.git
     2. pip install -r requeierments.txt
-    3. python run app.py
+    3. python app.py
 ### Try it out
 If everything work as expected you can reach the running api from the browser on http://localhost:5000/docs
 
